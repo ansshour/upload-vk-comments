@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .card {
+            width: 1000px;
+            margin-bottom: 30px;
+            border: 1px solid black;
+        }
+
+        .container {
+            width: 1200px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div id="root"></div>
+    </div>
+    <script>
+
+
+        const cardConstructor = (data) => {
+            div = document.createElement("div")
+            div.classList.add("card")
+            div.innerHTML = `
+            <p class = "name">name: ${data.name}</p>
+            <a href = \"${data.profileLink}\"><img src = \"${data.photo}\" width = "100px"/></a>
+            <p class = "text">${data.commentText}</p>
+            `
+            document.querySelector("#root").after(div);
+        }
+
+
+        const getComments = async (offset) => {
+            const response = await fetch(`http://localhost:4000/getcomments?offset=${offset}`);
+            const data = await response.json();
+            const items = data.response.items;
+            const profiles = data.response.profiles
+            const resultArr = [];
+            items.forEach(item => {
+                profiles.forEach(profile => {
+                    if (item.from_id === profile.id) {
+                        const dataObj = { name: `${profile.first_name} ${profile.last_name}`, photo: profile.photo_100, profileLink: `https://vk.com/id${profile.id}`, commentText: item.text }
+                        console.log(dataObj)
+                        cardConstructor(dataObj)
+                    }
+                })
+            })
+        }
+
+        const numbersOfComments = 1065;
+
+        let counter = 0;
+
+        for (let i = 0; i < numbersOfComments; i += 50) {
+            setTimeout(() => {
+                getComments(i)
+            }, counter * 2000)
+            counter++;
+        }
+
+
+
+
+    </script>
+</body>
+
+</html>
