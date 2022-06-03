@@ -1,10 +1,12 @@
 import express from "express";
 import fetch from "node-fetch";
 import cors from "cors";
+import bodyParser from "body-parser"
 
 const app = express()
 
-app.use(express.json());
+// app.use(express.json());
+app.use(bodyParser.json({ limit: "50mb" }))
 
 app.use(cors());
 
@@ -18,6 +20,11 @@ app.get("/getcomments", async (req, res) => {
         res.json(data)
     } catch (err) { console.log("error") }
 
+})
+
+app.post("/sendcomments", urlencodedParser, async (req, res) => {
+    const body = req.body;
+    console.log(req.body)
 })
 
 
