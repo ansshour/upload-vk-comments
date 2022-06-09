@@ -15,7 +15,7 @@ app.use(cors());
 
 const start = async () => {
 
-    await mongoose.connect(`mongodb+srv://ansshour:d20kv7943@cluster0.wjzoova.mongodb.net/?retryWrites=true&w=majority`)
+    await mongoose.connect(`mongodb+srv://ansshour:password@cluster0.wjzoova.mongodb.net/?retryWrites=true&w=majority`)
 
     const urlencodedParser = express.urlencoded({ extended: false });
     app.post("/getcomments", urlencodedParser, async (req, res) => {
